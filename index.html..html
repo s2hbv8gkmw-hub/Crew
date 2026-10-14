@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#151a20">
+<title>Cabinet Crew — Prototype</title>
+<style>
+:root{--bg:#11161c;--panel:#1b232c;--panel2:#232e39;--text:#f3f6f8;--muted:#a8b4bf;--accent:#f2b84b;--green:#70d6a1;--line:#34414d}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button,input,select,textarea{font:inherit}button{cursor:pointer;border:0;border-radius:12px;padding:12px 14px;font-weight:700;background:var(--accent);color:#1b2025}
+.app{max-width:760px;margin:auto;min-height:100dvh;padding-bottom:90px}.top{padding:22px 18px 14px;background:linear-gradient(145deg,#222d37,#14191f);border-bottom:1px solid var(--line)}
+.brand{font-size:12px;letter-spacing:2px;color:var(--accent);font-weight:800}.title{font-size:28px;font-weight:900;margin:5px 0}.sub{color:var(--muted);font-size:14px}
+main{padding:16px}.screen{display:none}.screen.active{display:block}.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:14px}
+.row{display:flex;gap:12px;align-items:center}.between{justify-content:space-between}.grow{flex:1;min-width:0}.muted{color:var(--muted)}.small{font-size:13px}.big{font-size:25px;font-weight:850}.section{font-size:18px;font-weight:800;margin:18px 0 10px}
+.progress{height:8px;background:#39434d;border-radius:20px;overflow:hidden;margin:10px 0}.progress>div{height:100%;width:0;background:var(--green);transition:width .25s}
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.stat{background:var(--panel2);padding:13px;border-radius:14px}.stat strong{display:block;font-size:22px;margin-top:5px}
+.nav{position:fixed;bottom:0;left:0;right:0;background:#171e25f5;border-top:1px solid var(--line);display:flex;justify-content:center;gap:3px;padding:8px 5px calc(8px + env(safe-area-inset-bottom));z-index:5}
+.nav button{background:transparent;color:var(--muted);font-size:11px;padding:8px 5px;flex:1;max-width:120px}.nav button.active{background:var(--panel2);color:var(--accent)}
+.kitchen{height:250px;border-radius:14px;overflow:hidden;position:relative;background:linear-gradient(#b8c4c8 0 55%,#d5c8b4 55% 100%);border:1px solid #4b5963}
+.window{position:absolute;top:18px;left:12%;width:24%;height:70px;border:6px solid #f1eee4;background:linear-gradient(90deg,#8aaebc 48%,#d7e5e7 49% 53%,#8aaebc 54%);box-shadow:0 2px 5px #566}
+.wallrun{position:absolute;top:20px;right:7%;display:flex;gap:4px}.wallcab{height:58px;width:48px;background:#d9d0be;border:3px solid #9e907a;box-shadow:inset 0 0 0 2px #eee5d6;position:relative}.wallcab:after{content:"";position:absolute;right:5px;top:25px;width:3px;height:13px;background:#776a59}
+.counter{position:absolute;bottom:77px;left:4%;width:92%;height:20px;background:#4c5557;transform:skewX(-8deg);box-shadow:0 4px 0 #9b8b74}
+.base-run{position:absolute;bottom:20px;left:6%;display:flex;gap:4px}.basecab{height:58px;width:65px;background:#c7bba7;border:3px solid #8b7d6b;box-shadow:inset 0 0 0 2px #e6dccb;position:relative}.basecab:after{content:"";position:absolute;top:7px;left:50%;height:42px;width:2px;background:#958773}.basecab:before{content:"";position:absolute;top:25px;left:50%;width:7px;height:4px;background:#5c5145}
+.basecab.installed{background:#b5d5c3;border-color:#4c8b6d}.basecab.installed:after{background:#4c8b6d}.toolrow{display:flex;flex-wrap:wrap;gap:8px}.tool{background:var(--panel2);color:var(--text);border:1px solid var(--line);padding:10px;font-size:13px}.tool.selected{outline:2px solid var(--accent);color:var(--accent)}
+label{display:block;font-size:13px;color:var(--muted);margin:12px 0 6px}input,select,textarea{width:100%;border:1px solid var(--line);border-radius:10px;background:#10161c;color:var(--text);padding:12px}textarea{min-height:78px;resize:vertical}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.entry{border-top:1px solid var(--line);padding:12px 0}.pill{display:inline-block;background:#26372f;color:var(--green);border-radius:30px;padding:4px 8px;font-size:11px;font-weight:800}.empty{color:var(--muted);padding:18px;text-align:center;border:1px dashed var(--line);border-radius:12px}
+button.secondary{background:var(--panel2);color:var(--text);border:1px solid var(--line)}button.danger{background:#512d31;color:#ffdfe2}.notice{background:#322d20;border:1px solid #5a4c2b;border-radius:12px;padding:12px;color:#f3d99d;font-size:13px}
+@media(min-width:600px){.stats{grid-template-columns:repeat(4,minmax(0,1fr))}.kitchen{height:300px}.basecab{width:78px;height:65px}.wallcab{width:58px;height:68px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="top">
+ <div class="brand">YOUR TRADE. YOUR CAREER.</div>
+ <div class="title">CABINET CREW <span style="color:var(--accent)">▰</span></div>
+ <div class="sub">Mobile prototype · Version 0.1 · Saves on this device</div>
+</header>
+<main>
+<section id="home" class="screen active">
+ <div class="card">
+  <div class="row between"><div><div class="muted small">CAREER RANK</div><div class="big" id="rank">Apprentice</div></div><div style="font-size:36px">🧰</div></div>
+  <div class="row between small"><span id="levelLabel">Level 1</span><span id="xpLabel">0 / 100 XP</span></div><div class="progress"><div id="xpBar"></div></div>
+  <div class="muted small">Game XP and real-world experience are tracked separately.</div>
+ </div>
+ <div class="stats">
+  <div class="stat"><span class="muted small">Game missions</span><strong id="missionsStat">0</strong></div>
+  <div class="stat"><span class="muted small">Real jobs logged</span><strong id="jobsStat">0</strong></div>
+  <div class="stat"><span class="muted small">Real hours</span><strong id="hoursStat">0</strong></div>
+  <div class="stat"><span class="muted small">Job sites saved</span><strong id="sitesStat">0</strong></div>
+ </div>
+ <div class="section">Ready for today's job?</div>
+ <div class="card"><div class="row"><div style="font-size:34px">🏠</div><div class="grow"><strong>Starter Kitchen</strong><div class="muted small">Mission 01 · Base cabinet installation</div></div><span class="pill">+100 XP</span></div><p class="muted small">Set your tools, install the cabinets, and finish with a quality check.</p><button onclick="showScreen('play')" style="width:100%">Start mission</button></div>
+ <div class="section">Career milestones</div><div class="card" id="milestones"></div>
+</section>
+<section id="play" class="screen">
+ <div class="section" style="margin-top:0">Mission 01: Starter Kitchen</div>
+ <div class="kitchen" aria-label="Illustrated kitchen scene">
+  <div class="window"></div>
+  <div class="wallrun"><div class="wallcab"></div><div class="wallcab"></div><div class="wallcab"></div></div>
+  <div class="counter"></div>
+  <div class="base-run"><div class="basecab" id="cab0"></div><div class="basecab" id="cab1"></div><div class="basecab" id="cab2"></div><div class="basecab" id="cab3"></div></div>
+ </div>
+ <div class="card" style="margin-top:14px"><div class="row between"><strong>Installation checklist</strong><span class="pill" id="missionProgress">0 / 4</span></div><p class="muted small">Choose a tool, then complete each step. This is a simplified game simulation, not real installation guidance.</p>
+  <div class="toolrow"><button class="tool selected" data-tool="Measure" onclick="selectTool(this)">📏 Measure</button><button class="tool" data-tool="Level" onclick="selectTool(this)">🫧 Level</button><button class="tool" data-tool="Drill" onclick="selectTool(this)">🔩 Drill</button><button class="tool" data-tool="Inspect" onclick="selectTool(this)">🔍 Inspect</button></div>
+  <div id="missionSteps" style="margin-top:12px"></div>
+  <div class="notice" id="gameMessage">Select a tool and begin your first task.</div>
+  <button class="secondary" onclick="resetMission()" style="width:100%;margin-top:10px">Reset mission</button>
+ </div>
+</section>
+<section id="tracker" class="screen">
+ <div class="section" style="margin-top:0">Real-world work log</div>
+ <div class="notice">Only enter details you're comfortable saving. Avoid customer names, access codes, or confidential addresses. This prototype stores data locally in this browser; it does not sync or back up automatically.</div>
+ <form class="card" id="jobForm">
+  <label for="jobDate">Date</label><input id="jobDate" type="date" required>
+  <div class="formgrid"><div><label for="jobType">Project type</label><select id="jobType"><option>Kitchen</option><option>Bathroom</option><option>Laundry / utility</option><option>Commercial</option><option>Other</option></select></div><div><label for="jobHours">Hours worked</label><input id="jobHours" type="number" min="0" max="24" step=".25" placeholder="8" required></div></div>
+  <div class="formgrid"><div><label for="cabCount">Cabinets installed (optional)</label><input id="cabCount" type="number" min="0" placeholder="0"></div><div><label for="jobSite">Site label (optional)</label><input id="jobSite" maxlength="60" placeholder="e.g. Job 014"></div></div>
+  <label for="skills">Skills practiced</label><input id="skills" maxlength="160" placeholder="Leveling, scribing, fillers...">
+  <label for="jobNotes">What did you learn?</label><textarea id="jobNotes" maxlength="800" placeholder="Notes for your own career record"></textarea>
+  <button type="submit" style="width:100%;margin-top:14px">Save real job</button>
+ </form>
+ <div class="section">Work history</div><div class="card" id="jobHistory"></div>
+ <button class="secondary" onclick="exportData()" style="width:100%;margin-bottom:10px">Export my records (JSON)</button>
+</section>
+<section id="map" class="screen">
+ <div class="section" style="margin-top:0">Career map & places</div>
+ <div class="card"><div style="font-size:35px">📍</div><strong>Your work, your history</strong><p class="muted small">Add a private site label to each job log. A real interactive map and optional GPS pins are planned for a later version.</p>
+ <label for="siteName">Add a site label</label><input id="siteName" maxlength="60" placeholder="e.g. Residential job 014">
+ <label for="siteArea">General area (optional)</label><input id="siteArea" maxlength="80" placeholder="e.g. Elizabethtown, KY">
+ <button onclick="addSite()" style="width:100%;margin-top:12px">Save site</button></div>
+ <div class="section">Saved sites</div><div class="card" id="siteHistory"></div>
+ <div class="notice">Location tracking is not automatic. You control what you record. Do not store exact customer addresses without permission.</div>
+</section>
+<section id="skills" class="screen">
+ <div class="section" style="margin-top:0">Skills & achievements</div>
+ <div class="card"><div class="row between"><div><div class="muted small">GAME LEVEL</div><div class="big" id="skillLevel">1</div></div><div><div class="muted small">GAME XP</div><div class="big" id="skillXP">0</div></div></div><div class="progress"><div id="skillBar"></div></div></div>
+ <div class="section">Achievements</div><div class="card" id="achievementList"></div>
+ <div class="section">Real-world skills</div><div class="card"><p class="muted small">Skills listed in your real job notes are self-reported practice, not verified certifications.</p><div id="realSkills"></div></div>
+ <button class="secondary" onclick="clearAll()" style="width:100%">Reset all prototype data</button>
+</section>
+</main>
+<nav class="nav">
+ <button class="active" data-screen="home" onclick="showScreen('home',this)">⌂<br>Home</button>
+ <button data-screen="play" onclick="showScreen('play',this)">🔨<br>Play</button>
+ <button data-screen="tracker" onclick="showScreen('tracker',this)">▤<br>Work log</button>
+ <button data-screen="map" onclick="showScreen('map',this)">⌖<br>Map</button>
+ <button data-screen="skills" onclick="showScreen('skills',this)">★<br>Skills</button>
+</nav>
+</div>
+<script>
+const KEY='cabinetCrewPrototypeV1';
+const defaultState={xp:0,missions:0,missionSteps:[],jobs:[],sites:[],completedMission:false};
+let state;
+try{state=JSON.parse(localStorage.getItem(KEY))||structuredClone(defaultState)}catch(e){state={...defaultState,jobs:[],sites:[],missionSteps:[]}}
+let chosenTool='Measure';
+const steps=[
+ {name:'Measure the cabinet run',tool:'Measure',cab:null,desc:'Use the tape measure to mark the cabinet layout.'},
+ {name:'Check level and alignment',tool:'Level',cab:null,desc:'Use the level tool to check the run.'},
+ {name:'Fasten the first cabinet',tool:'Drill',cab:0,desc:'Use the drill tool to complete the fastening task.'},
+ {name:'Install the remaining cabinets',tool:'Drill',cab:1,desc:'Continue the simulated installation.'},
+ {name:'Inspect the finished run',tool:'Inspect',cab:null,desc:'Check the completed work for the mission score.'}
+];
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}render()}
+function showScreen(id,btn){document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('active',s.id===id));document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.screen===id));if(btn)btn.classList.add('active');render()}
+function level(){return Math.floor(state.xp/100)+1}
+function rank(){let l=level();return l>=15?'Master Installer':l>=8?'Lead Installer':l>=4?'Installer':'Apprentice'}
+function selectTool(btn){chosenTool=btn.dataset.tool;document.querySelectorAll('.tool').forEach(b=>b.classList.toggle('selected',b===btn));document.getElementById('gameMessage').textContent='Selected: '+chosenTool+'. Now complete a matching task.'}
+function doStep(i){if(state.missionSteps.includes(i))return;const step=steps[i];if(chosenTool!==step.tool){document.getElementById('gameMessage').textContent='That task needs the '+step.tool+' tool. Select it and try again.';return}
+state.missionSteps.push(i);if(step.cab!==null){const cab=document.getElementById('cab'+step.cab);if(cab)cab.classList.add('installed')}
+if(i===4){state.completedMission=true;state.missions+=1;state.xp+=100;document.getElementById('gameMessage').textContent='Mission complete! +100 game XP. Quality check passed.'}else{state.xp+=10;document.getElementById('gameMessage').textContent='Task complete! +10 game XP.'}
+save()}
+function resetMission(){state.missionSteps=[];state.completedMission=false;save();document.getElementById('gameMessage').textContent='Mission reset. Your earned XP remains saved.'}
+function renderSteps(){const el=document.getElementById('missionSteps');el.innerHTML='';steps.forEach((s,i)=>{const done=state.missionSteps.includes(i);const row=document.createElement('div');row.className='entry row';row.innerHTML='<div class="grow"><strong>'+s.name+'</strong><div class="muted small">Tool: '+s.tool+'</div></div><button class="'+(done?'secondary':'')+'" '+(done?'disabled':'')+'>'+(done?'Done ✓':'Do task')+'</button>';row.querySelector('button').onclick=()=>doStep(i);el.appendChild(row)});document.getElementById('missionProgress').textContent=state.missionSteps.length+' / '+steps.length;for(let i=0;i<4;i++){let c=document.getElementById('cab'+i);if(c)c.classList.toggle('installed',state.missionSteps.includes(2)||state.missionSteps.includes(3)&&i>0)}}
+function renderJobs(){const el=document.getElementById('jobHistory');if(!state.jobs.length){el.innerHTML='<div class="empty">No real jobs logged yet. Add your first entry above.</div>';return}el.innerHTML='';[...state.jobs].reverse().forEach(j=>{let d=document.createElement('div');d.className='entry';d.innerHTML='<div class="row between"><strong>'+esc(j.type)+'</strong><span class="pill">REAL WORK</span></div><div class="muted small">'+esc(j.date)+' · '+Number(j.hours)+' hours'+(j.cabs!==''?' · '+Number(j.cabs)+' cabinets':'')+'</div>'+(j.site?'<div class="small">Site: '+esc(j.site)+'</div>':'')+(j.skills?'<div class="small">Skills: '+esc(j.skills)+'</div>':'')+(j.notes?'<p class="muted small">'+esc(j.notes)+'</p>':'');el.appendChild(d)})}
+function renderSites(){const el=document.getElementById('siteHistory');if(!state.sites.length){el.innerHTML='<div class="empty">No sites saved yet. Add a general area or private site label above.</div>';return}el.innerHTML='';state.sites.forEach((s,i)=>{let d=document.createElement('div');d.className='entry row';d.innerHTML='<div class="grow"><strong>📍 '+esc(s.name)+'</strong><div class="muted small">'+esc(s.area||'Area not specified')+' · '+esc(s.date)+'</div></div><button class="secondary" aria-label="Delete site">×</button>';d.querySelector('button').onclick=()=>{state.sites.splice(i,1);save()};el.appendChild(d)})}
+function render(){let l=level(),rem=state.xp%100;document.getElementById('rank').textContent=rank();document.getElementById('levelLabel').textContent='Level '+l;document.getElementById('xpLabel').textContent=rem+' / 100 XP';document.getElementById('xpBar').style.width=rem+'%';document.getElementById('missionsStat').textContent=state.missions;document.getElementById('jobsStat').textContent=state.jobs.length;document.getElementById('hoursStat').textContent=state.jobs.reduce((a,j)=>a+Number(j.hours||0),0).toLocaleString();document.getElementById('sitesStat').textContent=state.sites.length;document.getElementById('skillLevel').textContent=l;document.getElementById('skillXP').textContent=state.xp;document.getElementById('skillBar').style.width=rem+'%';document.getElementById('milestones').innerHTML=['Complete your first game mission','Log your first real-world job','Save your first job site','Reach game level 5'].map((x,i)=>'<div class="entry">'+((i===0&&state.missions>0)||(i===1&&state.jobs.length>0)||(i===2&&state.sites.length>0)||(i===3&&l>=5)?'🏆':'🔒')+' '+x+'</div>').join('');document.getElementById('achievementList').innerHTML=['First Mission','First Real Job','First Job Site','Level 5'].map((x,i)=>{let yes=[state.missions>0,state.jobs.length>0,state.sites.length>0,l>=5][i];return '<div class="entry">'+(yes?'🏆':'🔒')+' <strong>'+x+'</strong> <span class="muted small">'+(yes?'Unlocked':'Not yet unlocked')+'</span></div>'}).join('');let skills=[...new Set(state.jobs.flatMap(j=>(j.skills||'').split(',').map(s=>s.trim()).filter(Boolean)))];document.getElementById('realSkills').innerHTML=skills.length?skills.map(s=>'<span class="pill" style="margin:3px">'+esc(s)+'</span>').join(''):'<div class="muted small">Log skills in your work entries to build this list.</div>';renderSteps();renderJobs();renderSites()}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+document.getElementById('jobDate').value=new Date().toISOString().slice(0,10);
+document.getElementById('jobForm').addEventListener('submit',e=>{e.preventDefault();state.jobs.push({date:document.getElementById('jobDate').value,type:document.getElementById('jobType').value,hours:document.getElementById('jobHours').value,cabs:document.getElementById('cabCount').value,site:document.getElementById('jobSite').value.trim(),skills:document.getElementById('skills').value.trim(),notes:document.getElementById('jobNotes').value.trim()});save();e.target.reset();document.getElementById('jobDate').value=new Date().toISOString().slice(0,10);document.getElementById('gameMessage').textContent='Real job saved separately from game progress.';showScreen('tracker')});
+function addSite(){const name=document.getElementById('siteName').value.trim();if(!name){alert('Enter a site label first.');return}state.sites.push({name,area:document.getElementById('siteArea').value.trim(),date:new Date().toISOString().slice(0,10)});document.getElementById('siteName').value='';document.getElementById('siteArea').value='';save()}
+function exportData(){const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='cabinet-crew-records.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
+function clearAll(){if(confirm('Delete all saved prototype progress and real-work entries from this browser? Export first if you want a backup.')){state={xp:0,missions:0,missionSteps:[],jobs:[],sites:[],completedMission:false};save()}}
+render();
+</script>
+</body>
+</html>
